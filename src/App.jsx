@@ -52,6 +52,7 @@ export const App = () => {
 
       if (query && data.results.length > 0) {
         await updateSearchCount(query, data.results[0]);
+        await loadTrendingMovies();
       }
     } catch (error) {
       console.error(`Error fetching data: ${error}`);
