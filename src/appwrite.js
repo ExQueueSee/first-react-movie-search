@@ -54,7 +54,7 @@ export const getTrendingMovies = async () => {
             DATABASE_ID, 
             COLLECTION_ID, 
                 [   
-                    Query.limit(5), 
+                    Query.limit(10), //can be changed to any number
                     Query.orderDesc('count')
                 ]
         );

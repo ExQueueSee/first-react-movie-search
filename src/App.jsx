@@ -38,17 +38,35 @@ export const App = () => {
       const endpoint = query
         ? `${API_BASE_URL}/search/movie?query=${encodeURIComponent(query)}&api_key=${API_KEY}`
         : `${API_BASE_URL}/discover/movie?sort_by=popularity.desc&api_key=${API_KEY}`;
+
       const response = await fetch(endpoint, API_OPTIONS);
       if (!response.ok) {
         throw Error('Failed to fetch movies');
       }
       const data = await response.json();
+      const movies = data.results || [];
+
+      // Fetch movie details including homepage URLs
+      const moviesWithDetails = await Promise.all(
+        movies.map(async (movie) => {
+          const detailsResponse = await fetch(
+            `${API_BASE_URL}/movie/${movie.id}`,
+            API_OPTIONS
+          );
+          if (!detailsResponse.ok) return movie;
+          const details = await detailsResponse.json();
+          return { ...movie, homepage: details.homepage, imdb_id: details.imdb_id };
+        })
+      );
+
       if (data.response === 'False') {
         setErrorMessage(data.Error || 'Error fetching movies');
         setMovieList([]);
         return;
       }
-      setMovieList(data.results || []);
+
+      // Set the movies with homepage data
+      setMovieList(moviesWithDetails);
 
       if (query && data.results.length > 0) {
         await updateSearchCount(query, data.results[0]);
@@ -92,14 +110,21 @@ export const App = () => {
 
           {trendingMovies.length > 0 && (
             <section className="trending">
-              <h2>Trending Movies</h2>
+              <h2>Top 10 Trending Movies</h2>
               <ul>
-                {trendingMovies.map((movie, index) => (
-                  <li key={movie.$id}>
-                    <p>{index + 1} </p>
-                    <img src={movie.poster_url} alt={movie.title} />
-                  </li>
-                ))}
+                {trendingMovies.map((movie, index) => {
+                  const tmdbUrl = `https://www.themoviedb.org/movie/${movie.movie_id}`;
+                  return (
+                    <li key={movie.$id}>
+                      <a href={tmdbUrl} target="_blank" rel="noopener noreferrer">
+                        <p>{index + 1}</p>
+                      </a>
+                      <a href={tmdbUrl} target="_blank" rel="noopener noreferrer">
+                        <img src={movie.poster_url} alt={movie.title} />
+                      </a>
+                    </li>
+                  );
+                })}
               </ul>
             </section>
           )}
@@ -135,7 +160,7 @@ export const App = () => {
               }}
             />
           </a>
-          ‎ API but is not endorsed or certified by 
+          ‎ API but is not endorsed or certified by
           <a href="https://www.themoviedb.org/" target="_blank" rel="noopener noreferrer">
             <img
               src="/tmdb_logo.svg"
