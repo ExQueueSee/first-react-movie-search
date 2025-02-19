@@ -116,6 +116,7 @@ This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) f
 - 🚀 [Appwrite](https://appwrite.io/)
 - 🎨 [Tailwind CSS](https://tailwindcss.com/)
 - ⚡ [Vite](https://vitejs.dev/)
+- ▶️ [JS Mastery](https://www.youtube.com/c/JavaScriptMastery)
 
 ---
 💡 **Make sure to replace placeholders like** `your-username` **and** `your_tmdb_api_key` **with actual values before using this README.**
