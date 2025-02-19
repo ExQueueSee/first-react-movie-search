@@ -14,7 +14,7 @@ const MovieCard = ({ movie:
           src={
             poster_path
               ? `https://image.tmdb.org/t/p/w500/${poster_path}`
-              : `public/no-movie.png`
+              : `/no-movie.png`
           }
           alt={title}
         />
