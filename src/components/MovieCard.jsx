@@ -35,7 +35,7 @@ const MovieCard = ({ movie:
             <p className="year">{release_date ? release_date.split('-')[0] : 'N/A'}</p>
           </div>
           <a href={imdbUrl} target="_blank" rel="noopener noreferrer">
-            <img src="public/imdb_logo.png" alt="IMDB Icon" />
+            <img src="/imdb_logo.png" alt="IMDB Icon" />
           </a>
         </div>
       </div>
